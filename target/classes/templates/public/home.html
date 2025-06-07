@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Website Quyên góp</title>
+    <link rel="stylesheet" href="/user/assets/css/style.css"/>
+
+</head>
+<!--<body>-->
+<body id="top">
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div th:if="${msg}" class="toast" data-delay="1000" style="position:fixed; top: 100PX; left: 40PX;z-index: 2000;width: 300px">
+
+    <script>
+        swal({
+            title: 'Donate Successfully!',
+            /* text: 'Redirecting...', */
+            icon: 'success',
+            timer: 3000,
+            buttons: true,
+            type: 'success'
+        })
+    </script>
+</div>
+
+<div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+
+
+    <!-- NAVBAR -->
+    <header class="site-navbar mt-3">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="site-logo col-6"><a th:href="@{/templates/public}">Website Quyên Góp</a></div>
+
+            </div>
+        </div>
+    </header>
+    <section class="section-hero overlay inner-page bg-image"
+             style="background-image: url('@{/user/assets/images/hero_1.jpg}');"
+             id="home-section">
+        <img src="./user/assets/images/hero_1.jpg" alt="Image placeholder">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">Danh sách các đợt quyên góp</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+<!---->
+<section>
+    <div class="container">
+        <h1>Danh sách các đợt quyên góp</h1>
+        <ul class="job-listings mb-5">
+            <li th:each="category : ${campaignPage.content}" class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+                <div class="job-listing-about d-sm-flex w-100 justify-content-between mx-4">
+                    <div class="job-listing-position custom-width mb-3 mb-sm-0" style="width: 250px">
+                        <h2 th:text="${category.name}"></h2>
+                        <strong th:text="${category.status}"></strong>
+                    </div>
+                    <div class="job-listing-location mb-3 mb-sm-0 custom-width w-10" style="padding: 10px;">
+                        Ngày bắt đầu<br>
+                        <strong th:text="${#temporals.format(category.startDate, 'dd/MM/yyyy')}"></strong><br>
+                    </div>
+                    <div class="job-listing-location mb-3 mb-sm-0 custom-width w-10" style="padding: 10px;">
+                        Ngày kết thúc<br>
+                        <strong th:text="${#temporals.format(category.endDate, 'dd/MM/yyyy')}"></strong><br>
+                    </div>
+                    <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25" style="padding: 10px;">
+                        <span class="icon-room"></span> <span th:text="${category.organizationName}"></span><br>
+                        <strong th:text="${category.phoneNumber}"></strong><br>
+                    </div>
+                    <div class="job-listing-meta custom-width w-20">
+                        <a th:href="@{'/donation/' + ${category.id}}" class="btn btn-primary py-2">Xem chi tiết</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- Pagination-->
+        <div class="row">
+            <div class="col text-center">
+                <nav th:if="${userPage.totalPages > 1}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${userPage.first}? 'disabled'">
+                            <a class="page-link" th:href="@{|/admin/users?page=0|}">First</a>
+                        </li>
+                        <li class="page-item" th:classappend="${userPage.previousPageable == null}? 'disabled'">
+                            <a class="page-link" th:href="@{|/admin/users?page=${userPage.number - 1}|}">Prev</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}"
+                            class="page-item" th:classappend="${i == userPage.number}? 'active'">
+                            <a class="page-link" th:href="@{|/admin/users?page=${i}|}" th:text="${i + 1}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${userPage.nextPageable == null}? 'disabled'">
+                            <a class="page-link" th:href="@{|/admin/users?page=${userPage.number + 1}|}">Next</a>
+                        </li>
+                        <li class="page-item" th:classappend="${userPage.last}? 'disabled'">
+                            <a class="page-link" th:href="@{|/admin/users?page=${userPage.totalPages - 1}|}">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+</body>
+</html>

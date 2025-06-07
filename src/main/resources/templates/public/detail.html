@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết đợt quyên góp</title>
+  <link rel="stylesheet" href="/static/user/assets/css/style.css"/>
+
+</head>
+<body>
+<header>
+  <div class="site-logo"><a href="/">Website Quyên Góp</a></div>
+</header>
+<section>
+  <div class="container">
+    <h1>Chi tiết đợt quyên góp</h1>
+    <div>
+      <h3 th:text="${donation.name}"></h3>
+      <p><b>Mã:</b> <span th:text="${donation.code}"></span></p>
+      <p><b>Ngày bắt đầu:</b> <span th:text="${#temporals.format(donation.startDate, 'dd/MM/yyyy')}"></span></p>
+      <p><b>Ngày kết thúc:</b> <span th:text="${#temporals.format(donation.endDate, 'dd/MM/yyyy')}"></span></p>
+      <p><b>Tổ chức:</b> <span th:text="${donation.organizationName}"></span></p>
+      <p><b>Số điện thoại:</b> <span th:text="${donation.phoneNumber}"></span></p>
+      <p><b>Tổng tiền:</b> <span th:text="${#numbers.formatDecimal(donation.money, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span></p>
+      <p><b>Trạng thái:</b> <span th:text="${donation.status}"></span></p>
+      <div>
+        <label>Nội dung:</label>
+        <div th:utext="${donation.description}"></div>
+      </div>
+    </div>
+    <h4>Danh sách quyên góp</h4>
+    <table>
+      <thead>
+      <tr>
+        <th>Họ tên</th>
+        <th>Số tiền</th>
+        <th>Ngày quyên góp</th>
+        <th>Lời nhắn</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="donate : ${userDonationPage.content}">
+        <td th:text="${donate.name}"></td>
+        <td th:text="${#numbers.formatDecimal(donate.money, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+        <td th:text="${#temporals.format(donate.createAt, 'dd/MM/yyyy')}"></td>
+        <td th:text="${donate.message}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <!--   form quyên góp -->
+    <div>
+      <form th:action="@{/donate}" method="post">
+        <input type="hidden" th:name="donationCampaign.id" th:value="${donation.id}" />
+        <div>
+          <label>Họ tên:</label>
+          <input type="text" name="name" required/>
+        </div>
+        <div>
+          <label>Số tiền:</label>
+          <input type="number" name="money" required min="1000"/>
+        </div>
+        <div>
+          <label>Lời nhắn:</label>
+          <textarea name="message"></textarea>
+        </div>
+        <button type="submit">Quyên góp</button>
+      </form>
+    </div>
+  </div>
+</section>
+</body>
+</html>
